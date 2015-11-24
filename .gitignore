@@ -1,1 +1,3 @@
 project2/venv
+client_secret.json
+*.pyc
