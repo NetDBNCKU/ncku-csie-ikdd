@@ -26,6 +26,7 @@ def send_simple_message(request):
         elif tr.attrs['bgcolor'] == 'white':
             what, index = tr.select('a')[0].text, tr.select('b')[0].text
             if request.GET['what'] in what:
+                w_index = index
                 if request.GET['operator'] == '<':
                     send = float(index) < float(request.GET['index'])
                 elif request.GET['operator'] == '>':
@@ -35,7 +36,7 @@ def send_simple_message(request):
         message = sendEmail.CreateMessage(sender='rilislearning@gmail.com',
                 to=request.GET['email'],
                 subject='Index notify',
-                message_text=(request.GET['what'] + ' is ' + request.GET['operator'] + ' ' + request.GET['index']))
+                message_text=(request.GET['what'] + ' is ' + w_index + ' ' + request.GET['operator'] + ' ' + request.GET['index']))
         home_dir = os.path.expanduser('~')
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
