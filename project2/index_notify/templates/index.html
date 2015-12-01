@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<style>
+		#what-button {
+			position: relative;
+			top: 10px;
+			left: 15px;
+		}
+		#register-card {
+			overflow: visible;
+			margin: 0 auto;
+			width: 512px;
+		}
+		#register-card > .mdl-card__title {
+			color: white;
+			height: 176px;
+			background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg') center / cover;
+		}
+		#table-card {
+			margin: 0 auto;
+			width: 512px;
+		}
+		#table-card > .mdl-card__title {
+			color: white;
+			height: 176px;
+			background: url('http://www.getmdl.io/assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+		}
+		.expand {
+			width: 100%;
+		}
+		.mdl-menu {
+			height: 200px;
+			overflow-y: scroll;
+		}
+		.mdl-data-table td {
+			max-width: 12em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	</style>
+</head>
+
+<body>
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--6-col">
+            <div class="mdl-card mdl-shadow--2dp" id="register-card">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Register</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <div class="mdl-grid mdl-grid--no-spacing">
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label expand">
+                                <input class="mdl-textfield__input" type="email" id="email">
+                                <label class="mdl-textfield__label" for="email">Email...</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label expand">
+                                <input class="mdl-textfield__input" type="text" id="what" value="日經指數(^N2255)" disabled>
+                                <label class="mdl-textfield__label" for="what">What...</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--1-col">
+                            <button class="mdl-button mdl-js-button mdl-button--icon" id="what-button">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+                            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="what-button">
+                            </ul>
+                        </div>
+                        <div class="mdl-cell mdl-cell--5-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label expand">
+                                <input class="mdl-textfield__input" type="text" id="lower-bound">
+                                <label class="mdl-textfield__label" for="lower-bound">Lower...</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--2-col"></div>
+                        <div class="mdl-cell mdl-cell--5-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label expand">
+                                <input class="mdl-textfield__input" type="text" id="upper-bound">
+                                <label class="mdl-textfield__label" for="upper-bound">Upper...</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="mdl-progress mdl-js-progress mdl-progress__indeterminate expand" style="display:none"></div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="submit(this)">
+                        Submit
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+            <div class="mdl-card mdl-shadow--2dp" id="table-card">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Registered table</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <table class="mdl-data-table mdl-js-data-table">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Email</th>
+                                <th class="mdl-data-table__cell--non-numeric">What</th>
+                                <th>Lower</th>
+                                <th>Upper</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+	<script>
+		(function () {
+		 	$.ajax('load_registered_data', {
+				complete: function (html) {
+					members = JSON.parse(html.responseText);
+					for (var i = 0; i < members.length; ++i) {
+						$('#table-card tbody').append(
+							'<tr>' +
+							'	<td class="mdl-data-table__cell--non-numeric">' + members[i].email + '</td>' +
+							'	<td class="mdl-data-table__cell--non-numeric">' + members[i].what + '</td>' +
+							'	<td>' + members[i].lower + '</td>' +
+							'	<td>' + members[i].upper + '</td>' +
+							'</tr>'
+						);
+					}
+				}
+			});
+		 	$.ajax('load_financial_data', {
+				complete: function (html) {
+					what = JSON.parse(html.responseText);
+					for (var i = 0; i < what.length; ++i) {
+						$('ul.mdl-menu').append(
+							'<li class="mdl-menu__item" onclick="select_product(this)">' + what[i] + '</li>'
+						);
+					}
+				}
+			});
+		 })();
+
+		function submit(a) {
+			$(a).attr('disabled', true);
+			$('.mdl-progress').show();
+		 	$.ajax('register', {
+				data: (function () {
+					   		var query = '', low = $('#lower-bound').val(), up = $('#upper-bound').val();
+							query += 'email=' + $('#email').val() + '&';
+							query += 'what=' + $('#what').val() + '&';
+							if (low === '') {
+								query += 'lower=0&';
+							} else {
+								query += 'lower=' + low + '&';
+							}
+							if (up === '') {
+								query += 'upper=999999';
+							} else {
+								query += 'upper=' + up;
+							}
+					   		$('#email').val('');
+					   		$('#lower-bound').val('');
+							$('#upper-bound').val('');
+							return query;
+					   })(),
+				complete: function (html) {
+					members = JSON.parse(html.responseText);
+					$('#table-card tbody').html('');
+					for (var i = 0; i < members.length; ++i) {
+						$('#table-card tbody').append(
+							'<tr>' +
+							'	<td class="mdl-data-table__cell--non-numeric">' + members[i].email + '</td>' +
+							'	<td class="mdl-data-table__cell--non-numeric">' + members[i].what + '</td>' +
+							'	<td>' + members[i].lower + '</td>' +
+							'	<td>' + members[i].upper + '</td>' +
+							'</tr>'
+						);
+					}
+					$(a).attr('disabled', false);
+					$('.mdl-progress').hide();
+				}
+			});
+		}
+
+		function select_product(li) {
+			$('input#what').val($(li).text());
+		}
+	</script>
+</body>
+
+</html>
