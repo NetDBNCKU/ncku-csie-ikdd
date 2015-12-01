@@ -30,7 +30,7 @@ def load_registerd_data(request):
 
 def load_financial_data(request):
     page_source = requests.get('https://tw.stock.yahoo.com/us/worldidx.php')
-    soup = BeautifulSoup(page_source.text, 'lxml')
+    soup = BeautifulSoup(page_source.text, 'html5lib')
     what = []
 
     for tr in soup.select('table[cellpadding="4"] tr'):
