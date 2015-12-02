@@ -1,5 +1,5 @@
 import requests
-import sqlite3
+import json
 from bs4 import BeautifulSoup
 
 def send_index_notification(email, what, index):
@@ -11,12 +11,8 @@ def send_index_notification(email, what, index):
               "subject": "Index notify",
               "text": "Congratulations! Your stock(" + what + "): " + str(index)})
 
-conn = sqlite3.connect('index_notify/db.sqlite3')
-c = conn.cursor()
-
-c.execute('SELECT email, what, lower, upper FROM register_member')
-members = c.fetchall()
-conn.close()
+registered_json = requests.get('https://vast-ridge-9264.herokuapp.com/load_registered_data').text
+members = json.loads(registered_json)
 
 page_source = requests.get('https://tw.stock.yahoo.com/us/worldidx.php')
 soup = BeautifulSoup(page_source.text, 'html5lib')
@@ -27,9 +23,9 @@ for tr in soup.select('table[cellpadding="4"] tr'):
     elif tr.attrs['bgcolor'] == 'white':
         what, index = tr.select('a')[0].text, float(tr.select('b')[0].text)
         for member in members:
-            if member[1] in what:
-                if index > member[2] and index < member[3]:
-                    print('Success: ' + str(member[2]) + ' < ' + str(index) + ' < ' + str(member[3]))
-                    send_index_notification(email=member[0], what=member[1], index=index)
+            if member['what'] in what:
+                if index > member['lower'] and index < member['upper']:
+                    print('Success: ' + str(member['lower']) + ' < ' + str(index) + ' < ' + str(member['upper']))
+                    send_index_notification(email=member['email'], what=member['what'], index=index)
                 else:
-                    print('Failed: ' + str(index) + ' is not in range(' + str(member[2]) + ', ' + str(member[3]) + ')')
+                    print('Failed: ' + str(index) + ' is not in range(' + str(member['lower']) + ', ' + str(member['upper']) + ')')
