@@ -1,4 +1,5 @@
 project2/venv
+project3/venv
 client_secret.json
 *.pyc
 project2/index_notify/db.sqlite3
