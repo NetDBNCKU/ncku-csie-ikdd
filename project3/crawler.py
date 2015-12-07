@@ -16,7 +16,7 @@ conn = sqlite3.connect('game.db')
 curs = conn.cursor()
 
 curs.execute('''CREATE TABLE game
-                    (platform TEXT, name TEXT, time TEXT,
+                    (platform TEXT, name TEXT PRIMARY KEY, time TEXT,
                     type TEXT, view INTEGER, versions TEXT)''')
 
 for platform in platforms:
@@ -43,13 +43,16 @@ for platform in platforms:
                     versions.append(version.text.strip())
             game['versions'] = '|'.join(versions)
             print(game)
-            curs.execute('INSERT INTO game VALUES(' +
+            curs.execute('INSERT OR IGNORE INTO game VALUES(' +
                     repr(game['platform']) + ', ' +
                     repr(game['name']) + ', ' +
                     repr(game['time']) + ', ' +
                     repr(game['type']) + ', ' +
-                    repr(game['view']) + ', ' +
+                    repr(0) + ', ' +
                     repr(game['versions']) + ')')
+            curs.execute('UPDATE game SET view = view + ' +
+                    repr(game['view']) + ' WHERE name LIKE' +
+                    repr(game['name']))
         cur_page += 1
         if len(soup.select('a.next.hidden')) > 0:
             cur_page = 0
