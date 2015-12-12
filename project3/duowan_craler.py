@@ -1,12 +1,9 @@
 import threading
 import queue
-import urllib.request
-import urllib.error
-import http.client
-import html.parser
 import sys
 import re
-from firebase import firebase
+import requests
+import json
 from bs4 import BeautifulSoup
 
 VERSION_FLAG = {
@@ -56,25 +53,36 @@ MAX_SIZE_URL_QUEUE = 20
 MAX_NUM_THREAD = 10
 TIMEOUT_QUEUE = 60
 TIMEOUT_REQUEST = 5
+DUOWAN_HOST = 'tvgdb.duowan.com'
+FIREBASE_HOST = 'burning-fire-3884.firebaseio.com'
 
 ref_queue = queue.Queue(MAX_SIZE_URL_QUEUE)
-firebase = firebase.FirebaseApplication('https://burning-fire-3884.firebaseio.com', None)
 
 def crawl():
     cont = True
     game = {}
+    duowan_session = requests.Session()
+    firebase_session = requests.Session()
 
     while cont:
         try:
             ref = ref_queue.get(timeout=TIMEOUT_QUEUE)
-            url = 'http://tvgdb.duowan.com/' + ref['platform'] + '?page=' + str(ref['page'])
+            url = 'http://' + DUOWAN_HOST
+            url += '/' + ref['platform'] + '?page=' + str(ref['page'])
             try:
-                response = urllib.request.urlopen(url, timeout=TIMEOUT_REQUEST)
+                res = duowan_session.get(url, timeout=TIMEOUT_REQUEST)
+            except ReadTimeoutError as e:
+                print('Timeout exception: ' + url)
+                source = res.text.encode(res.encoding).decode('utf8')
+                print(source)
+                ref_queue.task_done()
+                continue
             except Exception as e:
-                print('Open exception')
-                print(url)
+                print('Open exception: ' + url)
                 print(e)
-            source = response.read().decode('utf8')
+                ref_queue.task_done()
+                continue
+            source = res.text.encode(res.encoding).decode('utf8')
             soup = BeautifulSoup(source, 'html5lib')
 
             for item in soup.select('div.item'):
@@ -83,46 +91,38 @@ def crawl():
                     game_name = game_name.replace('.', '')
                     if game_name.find('/') != -1:
                         game_name = game_name.replace('/', '(') + ')'
+                    if game_name == '':
+                        continue
                     game['platform'] = PLATFORM_FLAG[ref['platform']]
                     game['time'] = item.select('dd > ul > li > b')[3].text
                     game['type'] = TYPE_FLAG[item.select('dd > ul > li > b')[5].text]
                     game['view'] = int(item.select('dd > ul > li > b')[10].text)
-                    game['versions'] = 0
+                    game['version'] = 0
                     is_version_label = True
                     for version in item.select('div.version > span'):
                         if is_version_label:
                             is_version_label = False
                         else:
-                            game['versions'] += VERSION_FLAG[version.text.strip()]
+                            game['version'] += VERSION_FLAG[version.text.strip()]
 
-                    result = firebase.get('/game', game_name)
-                    if result:
-                        game['view'] += result['view']
-                        firebase.put('/game', game_name, game)
-                    else:
-                        firebase.put('/game', game_name, game)
+                    res = firebase_session.get(
+                            'https://' + FIREBASE_HOST + '/new_game' +
+                            '/' + game_name + '/.json')
+                    if res.text != 'null':
+                        game['view'] += json.loads(res.text)['view']
+                    firebase_session.put(
+                            'https://' + FIREBASE_HOST + '/new_game' +
+                            '/' + game_name + '/.json',
+                            data=json.dumps(game))
                 except Exception as e:
-                    print('Unknown item exception:')
-                    print(url)
+                    print('Unknown item exception: ' + url)
                     print(e)
         except queue.Empty:
             cont = False
-            continue
-        except http.client.HTTPException as e:
-            print('Read exception:')
-            print(url)
-            print(e)
-        except html.parser.HTMLParseError as e:
-            print('Parse exception:')
-            print(url)
-            print(e)
-        except Exception as e:
-            print('Unknown page exception:')
-            print(url)
-            print(e)
+        else:
+            ref_queue.task_done()
         finally:
             sys.stdout.flush()
-            ref_queue.task_done()
 
 if __name__ == '__main__':
 
@@ -131,8 +131,8 @@ if __name__ == '__main__':
         t.start()
 
     for platform in PLATFORM_FLAG:
-        response = urllib.request.urlopen('http://tvgdb.duowan.com/' + platform)
-        soup = BeautifulSoup(response.read().decode('utf8'), 'html5lib')
+        res = requests.get('http://' + DUOWAN_HOST + '/' + platform)
+        soup = BeautifulSoup(res.text.encode(res.encoding).decode('utf8'), 'html5lib')
         href = soup.select('a.last')[0]['href']
         max_page = int(re.search('.*page=(\d+).*', href).group(1))
         for i in range(max_page):
