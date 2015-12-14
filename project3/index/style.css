@@ -1,0 +1,18 @@
+div.chart > div.mdl-grid {
+    width: 100%;
+}
+
+ul.mui-dropdown__menu {
+    z-index: 2;
+}
+
+#xAxis path, #yAxis path, #xAxis line, #yAxis line {
+	stroke: #ccc;
+	fill: none;
+}
+
+div#spinner {
+    position: absolute;
+    top: 420px;
+    left: 650px;
+}
