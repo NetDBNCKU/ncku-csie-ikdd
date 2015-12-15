@@ -16,3 +16,13 @@ div#spinner {
     top: 420px;
     left: 650px;
 }
+
+circle.hidden {
+    fill: #ccc !important;
+}
+
+.extent {
+    fill: #000;
+    fill-opacity: .125;
+    stroke: #fff;
+}

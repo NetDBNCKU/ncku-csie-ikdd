@@ -52,40 +52,53 @@ var DESC = {
     ]
 };
 var X_DOMAIN = [new Date(343260800 * 1000), new Date(1481881600 * 1000)],
-    Y_DOMAIN = [Math.log10(100), Math.log10(2600000)];
-var POINT_COLOR,
-    cata = 'type',
-    xScale,
-    yScale;
+    Y_DOMAIN = [Math.log10(100), Math.log10(2600000)],
+    POINT_COLOR = d3.scale.category20(),
+    X_SCALE = d3.time.scale().range([20, 880]),
+    Y_SCALE = d3.scale.linear().range([600, 100]);
+var cata = 'type',
+    brush;
 
 function updateScales(xDomain, yDomain) {
     'use strict';
-    xScale = d3.time.scale().domain(xDomain).range([20, 880]);
-    yScale = d3.scale.linear().domain(yDomain).range([600, 100]);
-    
     d3.select('svg g.chart g#xAxis')
         .transition()
         .call(d3.svg.axis()
-             .scale(xScale)
+             .scale(X_SCALE.domain(xDomain))
              .orient('bottom'));
     
     d3.select('svg g.chart g#yAxis')
         .transition()
         .call(d3.svg.axis()
-             .scale(yScale)
+             .scale(Y_SCALE.domain(yDomain))
              .orient('left'));
 }
 
-function updateFlot() {
+function updateFlot(scales) {
     'use strict';
+    var date_v, log_v;
     d3.select('svg g.chart')
         .selectAll('circle')
         .attr('fill', function (d) {
             return POINT_COLOR(d[cata]);
         })
         .attr('visibility', function (d) {
+            if (scales !== undefined) {
+                date_v = new Date(d.time * 1000);
+                log_v = Math.log10(d.view);
+                if (date_v < scales[0][0] || date_v > scales[1][0] || log_v < scales[0][1] || log_v > scales[1][1]) {
+                    return 'hidden';
+                }
+            }
             return $('input#checkbox-' + d[cata]).prop('checked') ? 'visible' : 'hidden';
-        });
+        })
+        .attr('cx', function (d) {
+            return X_SCALE(new Date(d.time * 1000));
+        })
+        .attr('cy', function (d) {
+            return Y_SCALE(Math.log10(d.view));
+        })
+        .attr('r', 2);
 }
 
 function toggleAll() {
@@ -135,12 +148,23 @@ function changeCata(a, ct) {
     updateFlot();
 }
 
+function brushend() {
+    'use strict';
+    var scales = brush.extent();
+    window.console.log(scales);
+    if (brush.empty() !== true) {
+        updateScales([scales[0][0], scales[1][0]], [scales[0][1], scales[1][1]]);
+        updateFlot(scales);
+        brush.clear();
+        $('.extent').attr('height', 0);
+    }
+}
+
 (function () {
     'use strict';
     var svg,
-        data = [],
+        data,
         ref;
-    POINT_COLOR = d3.scale.category20();
     ref = new Firebase("https://burning-fire-3884.firebaseio.com/game");
     ref.once('value', function (snapshot) {
         data = snapshot.val();
@@ -151,13 +175,6 @@ function changeCata(a, ct) {
             .data(data)
             .enter()
             .append('circle')
-            .attr('cx', function (d) {
-                return xScale(new Date(d.time * 1000));
-            })
-            .attr('cy', function (d) {
-                return yScale(Math.log10(d.view));
-            })
-            .attr('r', 2)
             .on('mouseover', function (d) {
                 window.console.log(d);
             });
@@ -194,4 +211,11 @@ function changeCata(a, ct) {
     
     // Menu
     updateMenu();
+    
+    // Brush
+    brush = d3.svg.brush()
+        .x(X_SCALE)
+        .y(Y_SCALE)
+        .on('brushend', brushend);
+    d3.select('g.chart').call(brush);
 }());
