@@ -57,10 +57,12 @@ var X_DOMAIN = [new Date(343260800 * 1000), new Date(1481881600 * 1000)],
     X_SCALE = d3.time.scale().range([20, 880]),
     Y_SCALE = d3.scale.linear().range([600, 100]);
 var cata = 'type',
-    brush;
+    brush,
+    current_scales;
 
 function updateScales(xDomain, yDomain) {
     'use strict';
+    current_scales = [xDomain, yDomain];
     d3.select('svg g.chart g#xAxis')
         .transition()
         .call(d3.svg.axis()
@@ -74,7 +76,7 @@ function updateScales(xDomain, yDomain) {
              .orient('left'));
 }
 
-function updateFlot(scales) {
+function updateFlot() {
     'use strict';
     var date_v, log_v;
     d3.select('svg g.chart')
@@ -83,12 +85,11 @@ function updateFlot(scales) {
             return POINT_COLOR(d[cata]);
         })
         .attr('visibility', function (d) {
-            if (scales !== undefined) {
-                date_v = new Date(d.time * 1000);
-                log_v = Math.log10(d.view);
-                if (date_v < scales[0][0] || date_v > scales[1][0] || log_v < scales[0][1] || log_v > scales[1][1]) {
-                    return 'hidden';
-                }
+            date_v = new Date(d.time * 1000);
+            log_v = Math.log10(d.view);
+            if (date_v < current_scales[0][0] || date_v > current_scales[0][1] ||
+                    log_v < current_scales[1][0] || log_v > current_scales[1][1]) {
+                return 'hidden';
             }
             return $('input#checkbox-' + d[cata]).prop('checked') ? 'visible' : 'hidden';
         })
@@ -148,13 +149,20 @@ function changeCata(a, ct) {
     updateFlot();
 }
 
+function reset() {
+    'use strict';
+    updateMenu();
+    updateScales(X_DOMAIN, Y_DOMAIN);
+    updateFlot();
+}
+
 function brushend() {
     'use strict';
     var scales = brush.extent();
     window.console.log(scales);
     if (brush.empty() !== true) {
         updateScales([scales[0][0], scales[1][0]], [scales[0][1], scales[1][1]]);
-        updateFlot(scales);
+        updateFlot();
         brush.clear();
         $('.extent').attr('height', 0);
     }
