@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" href="/favicon.ico">
-    <meta property="og:title" content="用數據看台灣 - Team12-遊戲數據">
-    <meta property="og:site_name" content="用數據看台灣 - Team12-遊戲數據">
-    <meta property="og:description" content="description">
-    <title>用數據看台灣 - Team12-遊戲數據</title>
+    <meta property="og:title" content="用數據看台灣 - Team_12">
+    <meta property="og:site_name" content="用數據看台灣 - Team_12">
+    <meta property="og:description" content="Project description">
+    <title>用數據看台灣 - Team_12</title>
     <meta http-equiv="Content-Type" content="text/html" ;="" charset="utf-8">
-    <meta property="og:image" content="http://real.taiwanstat.com/images/assert/background.png">
+    <meta property="og:image" content="http://real.taiwanstat.com/images/Team_12.png">
     <meta property="og:image:type" content="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<base href="http://real.taiwanstat.com/" target="_blank">-->
@@ -19,8 +19,7 @@
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.indigo-pink.min.css" async="">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" async="">
     <!-- my js & css -->
-    <link rel="stylesheet" href="https://cdn.muicss.com/mui-0.2.9/css/mui.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
 
 <body>
@@ -36,36 +35,45 @@
             <nav class="mdl-navigation"> <a class="mdl-navigation__link" href="http://real.taiwanstat.com/">台灣開放即時資料</a> <a class="mdl-navigation__link" href="http://long.taiwanstat.com">台灣開放統計資料</a> <a class="mdl-navigation__link" href="http://global.taiwanstat.com/r/">世界即時資訊</a> <a class="mdl-navigation__link" href="http://global.taiwanstat.com/l/">世界統計資訊</a> <a class="mdl-navigation__link" href="http://taiwanstat.com/opendata">開放資料分析部落格</a> <a class="mdl-navigation__link" href="https://www.facebook.com/taiwanstat">Facebook 粉專</a> </nav>
         </div>
         <main class="mdl-layout__content" id="main-content">
-            <h2 id="title">Team12-遊戲數據</h2>
+            <h2 id="title">Team_12</h2>
             <div class="fb-plugin">
                 <div class="fb-like-box" data-href="https://www.facebook.com/taiwanstat?fref=ts" data-colorscheme="light" data-show-faces="false"></div>
                 <div class="fb-like" data-href="http://real.taiwanstat.com/Team_12" data-width="300px" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
             </div>
             <!-- my charts -->
             <div class="chart">
-                <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--10-col" id="plot">
+                <div class="ui grid">
+                    <div class="twelve wide column" id="plot">
+                        <svg>
+                            <g class="chart"></g>
+                        </svg>
                     </div>
-                    <div class="mdl-cell mdl-cell--2-col">
-                        <div class="mdl-cell mdl-cell--12-col">
-                            <div class="mui-dropdown">
-                                <button class="mui-btn mui-btn--primary" data-mui-toggle="dropdown">
-                                    依&nbsp;<span id="cata">類型</span>&nbsp;標記顏色
-                                    <span class="mui-caret"></span>
-                                </button>
-                                <ul class="mui-dropdown__menu">
-                                    <li><a href="javascript:void(0)" onclick="changeCata(this, 'version')">語言</a></li>
-                                    <li><a href="javascript:void(0)" onclick="changeCata(this, 'platform')">平台</a></li>
-                                    <li><a href="javascript:void(0)" onclick="changeCata(this, 'type')">類型</a></li>
-                                </ul>
+                    <div class="four wide column">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="ui compact menu">
+                                    <div class="ui simple dropdown item">
+                                        依&nbsp;<span id="cata">類型</span>&nbsp;標記顏色
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" onclick="changeCata(this, 'version')">語言</div>
+                                            <div class="item" onclick="changeCata(this, 'platform')">平台</div>
+                                            <div class="item" onclick="changeCata(this, 'type')">類型</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mdl-cell mdl-cell--12-col" id="option">
-                        </div>
-                        <div class="mdl-cell mdl-cell--12-col">
-                            <button class="mui-btn mui-btn--danger" onclick="updateFlot()">完成</button>
-                            <button class="mui-btn mui-btn--accent" onclick="toggleAll()">全選</button>
-                            <button class="mui-btn mui-btn--primary" onclick="reset()">重置</button>
+                            <div class="row">
+                                <button class="ui orange button" onclick="toggleAll()">反選</button>
+                                <button class="ui yellow button" onclick="resetAll()">重置</button>
+                                <button class="ui red button" onclick="updateFlot()">套用</button>
+                            </div>
+                            <div class="row">
+                                <div class="ui form">
+                                    <div class="grouped fields" id="checkbox-fields">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,14 +81,14 @@
             <div class="mdl-card mdl-shadow--2dp author">
                 <h4><a href="http://taiwanstat_members.cannerapp.com/">About Author</a></h4> <img class="ui circular image" src="http://real.taiwanstat.com/images/assert/background.png">
                 <div class="author-info">
-                    <h5>Ril Jian</h5></div>
+                    <h5>Your Name</h5></div>
             </div>
         </main>
     </div>
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="http://real.taiwanstat.com/bower_components/semantic/dist/semantic.min.js"></script>
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js" async=""></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -112,9 +120,8 @@
         <div class="mdl-mini-footer__right-section"> <span class="footer_msg">合作提案、客製化圖表製作、意見回饋  </span> 歡迎來信: <a href="mailto:contact@taiwanstat.com">contact@taiwanstat.com</a> </div>
     </footer>
     <script src="/js/main.js"></script>
-    <script src="https://cdn.muicss.com/mui-0.2.9/js/mui.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="./js/index.js"></script>
 
 
 </body>

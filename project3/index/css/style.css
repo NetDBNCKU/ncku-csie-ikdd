@@ -1,0 +1,19 @@
+#xAxis path, #yAxis path, #xAxis line, #yAxis line {
+	stroke: #ccc;
+	fill: none;
+}
+
+.extent {
+    fill: #000;
+    fill-opacity: .125;
+    stroke: #fff;
+}
+
+#plot > svg {
+    height: 640px;
+    width: 1000px;
+}
+
+g.chart {
+    transform: translate(90px, -40px);
+}
