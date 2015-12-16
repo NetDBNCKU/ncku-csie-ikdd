@@ -58,7 +58,8 @@ var POINT_COLOR = d3.scale.category20(),
     Y_SCALE = d3.scale.linear().range([600, 100]);
 var cata = 'type',
     current_scales,
-    data;
+    data,
+    brush;
 
 function updateScales(xDomain, yDomain) {
     'use strict';
@@ -149,7 +150,19 @@ function updateFlot() {
         .attr('cy', function (d) {
             return Y_SCALE(Math.log10(d.view));
         })
-        .attr('r', 2);
+        .attr('r', 3)
+        .on('mouseover', function (d) {
+            if (d.time > bounded[0][0] && d.time < bounded[0][1] &&
+                    d.view > bounded[1][0] && d.view < bounded[1][1] &&
+                    $('input#checkbox-' + d[cata]).prop('checked')) {
+                $('.steps > .step > .content > .description:eq(0)').text(d.name);
+                $('.steps > .step > .content > .description:eq(1)').text(DESC.type[d.type]);
+                $('.steps > .step > .content > .description:eq(2)').text(DESC.version[d.version]);
+                $('.steps > .step > .content > .description:eq(3)').text((new Date(d.time * 1000)).toDateString());
+                $('.steps > .step > .content > .description:eq(4)').text(DESC.platform[d.platform]);
+                $('.steps > .step > .content > .description:eq(5)').text(d.view);
+            }
+        });
 }
 
 function changeCata(div, ct) {
@@ -170,6 +183,19 @@ function resetAll() {
     $('input[id^="checkbox"]').prop('checked', 'checked');
 }
 
+
+function brushend() {
+    'use strict';
+    var scales = brush.extent();
+    window.console.log(scales);
+    if (brush.empty() !== true) {
+        updateScales([scales[0][0], scales[1][0]], [scales[0][1], scales[1][1]]);
+        updateFlot();
+        brush.clear();
+        $('.extent').attr('height', 0);
+    }
+}
+
 (function () {
     'use strict';
 
@@ -186,6 +212,8 @@ function resetAll() {
         
         updateFlot();
     });
+    
+    d3.select('g.chart').attr('transform', 'translate(90, -40)');
     
     // Axis labels
     d3.select('g.chart')
@@ -208,6 +236,13 @@ function resetAll() {
         .attr('transform', 'translate(5, 0)')
         .attr('id', 'yAxis');
     updateScales(X_DEFAULT_DOMAIN, Y_DEFAULT_DOMAIN);
+    
+    // Brush
+    brush = d3.svg.brush()
+        .x(X_SCALE)
+        .y(Y_SCALE)
+        .on('brushend', brushend);
+    d3.select('g.chart').call(brush);
 
     updateMenu();
 }());
