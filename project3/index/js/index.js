@@ -216,9 +216,18 @@ function brushend() {
 (function () {
     'use strict';
 
+    $('body').append(
+        '<div class="ui segment" id="wait">' +
+            '   <div class="ui active dimmer">' +
+            '       <div class="ui large text loader">Loading</div>' +
+            '   </div>' +
+            '</div>'
+    );
+    
     // Fetch data
     (new Firebase("https://burning-fire-3884.firebaseio.com/game")).startAt().limitToFirst(500).once('value', function (snapshot) {
         data = snapshot.val();
+        $('#wait').remove();
     
         // Points
         d3.select('g.chart')
