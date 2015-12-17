@@ -54,7 +54,7 @@ var DESC = {
 var POINT_COLOR = d3.scale.category20(),
     X_DEFAULT_DOMAIN = [new Date(343260800 * 1000), new Date(1481881600 * 1000)],
     Y_DEFAULT_DOMAIN = [Math.log10(100), Math.log10(2600000)],
-    X_SCALE = d3.time.scale().range([20, 880]),
+    X_SCALE = d3.time.scale().range([20, $('svg').width() * 0.87]),
     Y_SCALE = d3.scale.linear().range([600, 100]);
 var cata = 'type',
     current_scales,
@@ -129,7 +129,9 @@ function updateFlot() {
             Math.pow(10, current_scales[1][0]),
             Math.pow(10, current_scales[1][1])
         ]
-    ];
+    ],
+        cnt = 0,
+        keyword = $('input.prompt').val();
     d3.selectAll('circle')
         .attr('fill', function (d) {
             return POINT_COLOR(d[cata]);
@@ -139,6 +141,7 @@ function updateFlot() {
                     d.view < bounded[1][0] || d.view > bounded[1][1]) {
                 return 'hidden';
             } else if ($('input#checkbox-' + d[cata]).prop('checked')) {
+                cnt += 1;
                 return 'visible';
             } else {
                 return 'hidden';
@@ -150,7 +153,18 @@ function updateFlot() {
         .attr('cy', function (d) {
             return Y_SCALE(Math.log10(d.view));
         })
-        .attr('r', 3)
+        .attr('r', function (d) {
+            var r;
+            if (cnt > 100) {
+                r = 3;
+            } else {
+                r = 10;
+            }
+            if (keyword !== '' && d.name.indexOf(keyword) > -1) {
+                r *= 3;
+            }
+            return r;
+        })
         .on('mouseover', function (d) {
             if (d.time > bounded[0][0] && d.time < bounded[0][1] &&
                     d.view > bounded[1][0] && d.view < bounded[1][1] &&
@@ -180,14 +194,17 @@ function toggleAll() {
 
 function resetAll() {
     'use strict';
-    $('input[id^="checkbox"]').prop('checked', 'checked');
+    //$('input[id^="checkbox"]').prop('checked', 'checked');
+    $('input.prompt').val('');
+    updateMenu();
+    updateScales(X_DEFAULT_DOMAIN, Y_DEFAULT_DOMAIN);
+    updateFlot();
 }
 
 
 function brushend() {
     'use strict';
     var scales = brush.extent();
-    window.console.log(scales);
     if (brush.empty() !== true) {
         updateScales([scales[0][0], scales[1][0]], [scales[0][1], scales[1][1]]);
         updateFlot();
@@ -200,7 +217,7 @@ function brushend() {
     'use strict';
 
     // Fetch data
-    (new Firebase("https://burning-fire-3884.firebaseio.com/game")).once('value', function (snapshot) {
+    (new Firebase("https://burning-fire-3884.firebaseio.com/game")).startAt().limitToFirst(500).once('value', function (snapshot) {
         data = snapshot.val();
     
         // Points
