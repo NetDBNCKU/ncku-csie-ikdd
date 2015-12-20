@@ -165,7 +165,7 @@ function updateFlot() {
             }
             return r;
         })
-        .on('mouseover', function (d) {
+        .on('mousedown.display', function (d) {
             if (d.time > bounded[0][0] && d.time < bounded[0][1] &&
                     d.view > bounded[1][0] && d.view < bounded[1][1] &&
                     $('input#checkbox-' + d[cata]).prop('checked')) {
@@ -201,16 +201,17 @@ function resetAll() {
     updateFlot();
 }
 
-
 function brushend() {
     'use strict';
     var scales = brush.extent();
-    if (brush.empty() !== true) {
+    if (scales[0][0] > current_scales[0][0] && scales[1][0] < current_scales[0][1] &&
+            scales[0][1] > current_scales[1][0] && scales[1][1] < current_scales[0][1] &&
+            brush.empty() !== true) {
         updateScales([scales[0][0], scales[1][0]], [scales[0][1], scales[1][1]]);
         updateFlot();
-        brush.clear();
-        $('.extent').attr('height', 0);
     }
+    brush.clear();
+    $('.extent').attr('height', 0);
 }
 
 (function () {
@@ -225,12 +226,12 @@ function brushend() {
     );
     
     // Fetch data
-    (new Firebase("https://burning-fire-3884.firebaseio.com/game")).startAt().limitToFirst(2000).once('value', function (snapshot) {
+    (new Firebase("https://burning-fire-3884.firebaseio.com/game")).startAt().limitToFirst(500).once('value', function (snapshot) {
         data = snapshot.val();
         $('#wait').remove();
     
         // Points
-        d3.select('g.chart')
+        d3.select('g.g-chart')
             .selectAll('circle')
             .data(data)
             .enter()
@@ -239,25 +240,25 @@ function brushend() {
         updateFlot();
     });
     
-    d3.select('g.chart').attr('transform', 'translate(90, -40)');
+    d3.select('g.g-chart').attr('transform', 'translate(90, -40)');
     
     // Axis labels
-    d3.select('g.chart')
+    d3.select('g.g-chart')
         .append('text')
         .attr({'id': 'xLabel', 'x': 450, 'y': 670})
         .text('時間');
-    d3.select('g.chart')
+    d3.select('g.g-chart')
         .append('text')
         .attr('id', 'yLabel')
         .attr('transform', 'translate(-60, 330) rotate(-90)')
         .text('瀏覽');
     
     // Axis scales
-    d3.select('g.chart')
+    d3.select('g.g-chart')
         .append('g')
         .attr('transform', 'translate(0, 630)')
         .attr('id', 'xAxis');
-    d3.select('g.chart')
+    d3.select('g.g-chart')
         .append('g')
         .attr('transform', 'translate(5, 0)')
         .attr('id', 'yAxis');
@@ -268,7 +269,7 @@ function brushend() {
         .x(X_SCALE)
         .y(Y_SCALE)
         .on('brushend', brushend);
-    d3.select('g.chart').call(brush);
+    d3.select('g.g-chart').call(brush);
 
     
     $("input.prompt").keyup(function (e) {
