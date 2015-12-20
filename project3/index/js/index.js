@@ -225,7 +225,7 @@ function brushend() {
     );
     
     // Fetch data
-    (new Firebase("https://burning-fire-3884.firebaseio.com/game")).startAt().limitToFirst(500).once('value', function (snapshot) {
+    (new Firebase("https://burning-fire-3884.firebaseio.com/game")).startAt().limitToFirst(2000).once('value', function (snapshot) {
         data = snapshot.val();
         $('#wait').remove();
     
@@ -270,5 +270,11 @@ function brushend() {
         .on('brushend', brushend);
     d3.select('g.chart').call(brush);
 
+    
+    $("input.prompt").keyup(function (e) {
+        if (e.keyCode === 13) {
+            updateFlot();
+        }
+    });
     updateMenu();
 }());
