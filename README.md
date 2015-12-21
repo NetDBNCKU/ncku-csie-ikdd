@@ -4,13 +4,13 @@
 
 ### 功能
 
-* 局部放大
+* 局部放大<br>
 ![Zoom in](https://raw.githubusercontent.com/riljian/ncku-csie-ikdd/gh-pages/img/pic_1.jpg)
-* 依屬性標色
+* 依屬性標色<br>
 ![Catagory](https://raw.githubusercontent.com/riljian/ncku-csie-ikdd/gh-pages/img/pic_3.jpg)
-* 顯示特定類別 - 選取類別後點選`套用`按鈕
+* 顯示特定類別 - 選取類別後點選`套用`按鈕<br>
 ![Type](https://raw.githubusercontent.com/riljian/ncku-csie-ikdd/gh-pages/img/pic_4.jpg)
-* 關鍵字搜尋
+* 關鍵字搜尋<br>
 ![Keyword](https://raw.githubusercontent.com/riljian/ncku-csie-ikdd/gh-pages/img/pic_5.jpg)
 
 ### 設計流程
