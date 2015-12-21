@@ -131,7 +131,8 @@ function updateFlot() {
         ]
     ],
         cnt = 0,
-        keyword = $('input.prompt').val();
+        keyword = $('input.prompt').val(),
+        pattern = new RegExp(keyword, 'i');
     d3.selectAll('circle')
         .attr('fill', function (d) {
             return POINT_COLOR(d[cata]);
@@ -160,7 +161,7 @@ function updateFlot() {
             } else {
                 r = 10;
             }
-            if (keyword !== '' && d.name.indexOf(keyword) > -1) {
+            if (keyword !== '' && pattern.test(d.name)) {
                 r *= 3;
             }
             return r;
