@@ -28,3 +28,8 @@ circle {
     width: 100%;
     cursor: wait;
 }
+
+div.description {
+    max-height: 16px;
+    overflow-y: scroll;
+}
