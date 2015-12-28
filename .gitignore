@@ -1,6 +1,8 @@
 project2/venv
 project3/venv
+project4/venv
 client_secret.json
 *.pyc
 project2/index_notify/db.sqlite3
 project4/*.csv
+out
