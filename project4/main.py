@@ -8,7 +8,7 @@ SPEC_CATA = (
     'Product_Info_2',
     'Response'
 )
-NUM_CONSIDERED_CATA = 36
+NUM_CONSIDERED_CATA = 37
 
 def is_number(s):
     try:
@@ -65,8 +65,8 @@ with open('input/train.csv', newline='') as train_file:
     clf.fit(train_input, train_output)
 
 with\
-    open('input/train.csv', newline='') as input_file,\
-    open('output2.csv', 'w') as output_file:
+    open('input/test.csv', newline='') as input_file,\
+    open('output.csv', 'w') as output_file:
 
     reader = csv.DictReader(input_file)
     predict_input = []
@@ -86,11 +86,6 @@ with\
         predict_id.append(row['Id'])
 
     predict_output = clf.predict(predict_input)
-    counter = 0
-    for i in range(len(train_output)):
-        if train_output[i] == predict_output[i]:
-            counter += 1
-    print(str(counter), '/', str(len(train_output)))
 
     output_file.write('"Id","Response"')
     for i in range(len(predict_id)):
