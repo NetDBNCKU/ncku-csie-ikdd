@@ -1,12 +1,7 @@
-html, body {
-    height: 100%;
-}
-
 #button-div {
-    text-align: center;
-    padding: 10px;
+    padding: 10px 0;
 }
 
 #map {
-    height: 90%;
+    height: 600px;
 }

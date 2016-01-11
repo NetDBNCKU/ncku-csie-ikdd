@@ -4,19 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Traffic accident report</title>
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div id="button-div">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Accident report</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Display in list</button>
+    <div class="container-fluid">
+        <div class="row text-center" id="button-div">
+            <button class="btn btn-warning btn-lg" onclick="accidentReport()">Accident report</button>
+            <button class="btn btn-primary btn-lg">Display in list</button>
+        </div>
+        <div class="row" id="map"></div>
     </div>
-    <div id="map"></div>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
     <script src="js/script.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCquZV94BIFX8D4J75AG8ZWGICNOJOGb60&callback=mapsAPILoaded">
     </script>
