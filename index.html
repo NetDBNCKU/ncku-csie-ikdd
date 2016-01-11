@@ -1,147 +1,25 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-TW">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/TaiwanStat/twstat-template/master/images/assert/round-logo.png" type="image/x-icon">
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/TaiwanStat/twstat-template/master/images/assert/round-logo.png">
-    <meta property="og:title" content="用數據看台灣 - Team_12">
-    <meta property="og:site_name" content="用數據看台灣 - Team_12">
-    <meta property="og:description" content="Project description">
-    <title>用數據看台灣 - Team_12</title>
-    <meta http-equiv="Content-Type" content="text/html" ;="" charset="utf-8">
-    <meta property="og:image" content="http://real.taiwanstat.com/images/Team_12.png">
-    <meta property="og:image:type" content="image/png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<base href="http://real.taiwanstat.com/" target="_blank">-->
-    <link rel="stylesheet" href="http://real.taiwanstat.com/bower_components/semantic/dist/semantic.min.css" type="text/css" media="all" async="">
-    <link rel="stylesheet" href="http://real.taiwanstat.com/css/style.css" type="text/css" media="all">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.indigo-pink.min.css" async="">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" async="">
-    <!-- my js & css -->
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <meta charset="UTF-8">
+    <title>Traffic accident report</title>
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" id="layout-header">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row"> <span class="mdl-layout-title"><a href="http://real.taiwanstat.com/" style="color: #FFF"><img src="http://real.taiwanstat.com/images/assert/round-logo.png" id="round-logo">用數據看台灣</a></span>
-                <div class="mdl-layout-spacer"></div>
-                <nav class="mdl-navigation mdl-layout--large-screen-only"> <a class="mdl-navigation__link" href="http://real.taiwanstat.com/">台灣開放即時資料</a> <a class="mdl-navigation__link" href="http://long.taiwanstat.com">台灣開放統計資料</a> <a class="mdl-navigation__link" href="http://global.taiwanstat.com/r/">世界即時資訊</a> <a class="mdl-navigation__link" href="http://global.taiwanstat.com/l/">世界統計資訊</a> <a class="mdl-navigation__link" href="http://taiwanstat.com/opendata">開放資料分析部落格</a> <a class="mdl-navigation__link" href="https://www.facebook.com/taiwanstat">Facebook 粉專</a> </nav>
-                <div> </div>
-            </div>
-        </header>
-        <div class="mdl-layout__drawer"> <span class="mdl-layout-title"><a href="http://real.taiwanstat.com/"><img src="/images/assert/round-logo.png" id="round-logo">用數據看台灣</a></span>
-            <nav class="mdl-navigation"> <a class="mdl-navigation__link" href="http://real.taiwanstat.com/">台灣開放即時資料</a> <a class="mdl-navigation__link" href="http://long.taiwanstat.com">台灣開放統計資料</a> <a class="mdl-navigation__link" href="http://global.taiwanstat.com/r/">世界即時資訊</a> <a class="mdl-navigation__link" href="http://global.taiwanstat.com/l/">世界統計資訊</a> <a class="mdl-navigation__link" href="http://taiwanstat.com/opendata">開放資料分析部落格</a> <a class="mdl-navigation__link" href="https://www.facebook.com/taiwanstat">Facebook 粉專</a> </nav>
-        </div>
-        <main class="mdl-layout__content" id="main-content">
-            <!-- my charts -->
-            <div class="chart">
-                <div class="ui grid">
-                    <div class="sixteen wide column">
-                        <div class="ui six steps">
-                            <div class="step">
-                                <div class="content">
-                                    <div class="title">遊戲名稱</div>
-                                    <div class="description"></div>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="content">
-                                    <div class="title">遊戲類型</div>
-                                    <div class="description"></div>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="content">
-                                    <div class="title">語言</div>
-                                    <div class="description"></div>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="content">
-                                    <div class="title">發行時間</div>
-                                    <div class="description"></div>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="content">
-                                    <div class="title">遊戲平台</div>
-                                    <div class="description"></div>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="content">
-                                    <div class="title">瀏覽人次</div>
-                                    <div class="description"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="twelve wide column" id="plot">
-                        <svg>
-                            <g class="g-chart"></g>
-                        </svg>
-                    </div>
-                    <div class="four wide column">
-                        <div class="ui grid">
-                            <div class="row">
-                                <div class="ui compact menu">
-                                    <div class="ui simple dropdown item">
-                                        依&nbsp;<span id="cata">類型</span>&nbsp;標記顏色
-                                        <i class="dropdown icon"></i>
-                                        <div class="menu">
-                                            <div class="item" onclick="changeCata(this, 'version')">語言</div>
-                                            <div class="item" onclick="changeCata(this, 'platform')">平台</div>
-                                            <div class="item" onclick="changeCata(this, 'type')">類型</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="ui search">
-                                  <div class="ui icon input">
-                                    <input class="prompt" placeholder="遊戲名稱" type="text">
-                                    <i class="search icon" onclick="updateFlot()"></i>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <button class="ui orange button" onclick="toggleAll()">反選</button>
-                                <button class="ui yellow button" onclick="resetAll()">重置</button>
-                                <button class="ui red button" onclick="updateFlot()">套用</button>
-                            </div>
-                            <div class="row">
-                                <div class="ui form">
-                                    <div class="grouped fields" id="checkbox-fields">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mdl-card mdl-shadow--2dp author">
-                <h4><a href="http://taiwanstat_members.cannerapp.com/">About Author</a></h4> <img class="ui circular image" src="http://real.taiwanstat.com/images/assert/background.png">
-                <div class="author-info">
-                    <h5>Ril Jian</h5></div>
-            </div>
-        </main>
+    <div id="button-div">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Accident report</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Display in list</button>
     </div>
-    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="http://real.taiwanstat.com/bower_components/semantic/dist/semantic.min.js"></script>
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js" async=""></script>
-    <!-- my js & css -->
-    <footer class="mdl-mini-footer">
-        <div class="mdl-mini-footer__left-section">© 2015 <a href="http://taiwanstat_members.cannerapp.com">用數據看台灣團隊</a> | <a href="http://netdb.csie.ncku.edu.tw">NCKU-NetDB</a> </div>
-        <div class="mdl-mini-footer__right-section"> <span class="footer_msg">合作提案、客製化圖表製作、意見回饋  </span> 歡迎來信: <a href="mailto:contact@taiwanstat.com">contact@taiwanstat.com</a> </div>
-    </footer>
-    <script src="/js/main.js"></script>
-    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
-    <script type="text/javascript" src="./js/index.js"></script>
-
-
+    <div id="map"></div>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCquZV94BIFX8D4J75AG8ZWGICNOJOGb60&callback=mapsAPILoaded">
+    </script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>

@@ -1,35 +1,12 @@
-#xAxis path, #yAxis path, #xAxis line, #yAxis line {
-	stroke: #ccc;
-	fill: none;
-}
-
-.extent {
-    fill: #000;
-    fill-opacity: .125;
-    stroke: #fff;
-}
-
-#plot > svg {
-    height: 640px;
-    width: 100%;
-}
-
-.steps > .step > .content {
-    background-color: inherit !important;
-}
-
-circle {
-    cursor: pointer;
-}
-
-#wait {
-    position: absolute;
+html, body {
     height: 100%;
-    width: 100%;
-    cursor: wait;
 }
 
-div.description {
-    max-height: 16px;
-    overflow-y: scroll;
+#button-div {
+    text-align: center;
+    padding: 10px;
+}
+
+#map {
+    height: 90%;
 }
