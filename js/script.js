@@ -12,7 +12,7 @@ function applyPosition(position) {
     marker = new google.maps.Marker({
         position: latlng,
         map: map,
-        icon: '../img/1452554285_car.png'
+        icon: 'img/1452554285_car.png'
     });
     firebase.on('child_added', function (snapshot) {
         var data = snapshot.val();
