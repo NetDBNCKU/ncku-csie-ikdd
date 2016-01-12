@@ -31,6 +31,7 @@ function mapsAPILoaded() {
     currentMarker = new google.maps.Marker({
         position: defaultPosition,
         map: map,
+        zIndex: google.maps.Marker.MAX_ZINDEX + 1,
         icon: 'img/1452554285_car.png'
     });
     firebase.on('child_added', function (snapshot) {
