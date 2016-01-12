@@ -6,14 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Traffic accident report</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <div id="map"></div>
+    <button  id="position-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onclick="relocate()">
+        <i class="material-icons">gps_fixed</i>
+    </button>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
     <script src="js/script.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCquZV94BIFX8D4J75AG8ZWGICNOJOGb60&callback=mapsAPILoaded">

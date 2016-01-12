@@ -5,3 +5,12 @@ html, body {
 #map {
     height: 100%;
 }
+
+#position-btn {
+    z-index: 99;
+    position: absolute;
+    background-color: lightgray;
+    right: 3%;
+    top: 3%;
+    display: none;
+}

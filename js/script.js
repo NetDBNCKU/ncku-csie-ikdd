@@ -12,7 +12,7 @@ function applyPosition(position) {
     var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
     currentMarker.setPosition(latlng);
     if (autoMove) {
-        map.setCenter(latlng);
+        map.panTo(latlng);
     }
 }
 
@@ -28,6 +28,10 @@ function mapsAPILoaded() {
         center: defaultPosition,
         zoom: 16
     });
+    map.addListener('dragstart', function () {
+        autoMove = false;
+        $('#position-btn').fadeIn();
+    });
     currentMarker = new google.maps.Marker({
         position: defaultPosition,
         map: map,
@@ -42,6 +46,12 @@ function mapsAPILoaded() {
             animation: google.maps.Animation.DROP
         }));
     });
+}
+
+function relocate() {
+    'use strict';
+    autoMove = true;
+    $('#position-btn').fadeOut();
 }
 
 function accidentReport() {
