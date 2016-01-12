@@ -1,7 +1,7 @@
-#button-div {
-    padding: 10px 0;
+html, body {
+    height: 100%;
 }
 
 #map {
-    height: 600px;
+    height: 100%;
 }

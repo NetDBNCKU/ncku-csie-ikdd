@@ -1,38 +1,46 @@
 /*global google:false, Firebase:false, $:false*/
 
 var map;
-var markers = [];
+var watchPositionID;
+var currentMarker;
+var autoMove = true;
+var accidentMarkers = [];
 var firebase = new Firebase("https://glaring-torch-4222.firebaseio.com/accident/");
 
 function applyPosition(position) {
     'use strict';
-    var latlng = {lat: position.coords.latitude, lng: position.coords.longitude}, marker;
-    map.setCenter(latlng);
-    map.setZoom(16);
-    marker = new google.maps.Marker({
-        position: latlng,
+    var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+    currentMarker.setPosition(latlng);
+    if (autoMove) {
+        map.setCenter(latlng);
+    }
+}
+
+function positionErrorHandler(positionError) {
+    'use strict';
+    window.alert('Error: ' + positionError.message);
+}
+
+function mapsAPILoaded() {
+    'use strict';
+    var defaultPosition = {lat: 25.039820, lng: 121.512001};
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: defaultPosition,
+        zoom: 16
+    });
+    currentMarker = new google.maps.Marker({
+        position: defaultPosition,
         map: map,
         icon: 'img/1452554285_car.png'
     });
     firebase.on('child_added', function (snapshot) {
         var data = snapshot.val();
-        markers.push(new google.maps.Marker({
+        accidentMarkers.push(new google.maps.Marker({
             position: {lat: data.latitude, lng: data.longitude},
             map: map,
             animation: google.maps.Animation.DROP
         }));
     });
-}
-
-function mapsAPILoaded() {
-    'use strict';
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 25.039820, lng: 121.512001},
-        zoom: 8
-    });
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(applyPosition);
-    }
 }
 
 function accidentReport() {
@@ -52,3 +60,12 @@ function accidentReport() {
         });
     });
 }
+
+(function () {
+    'use strict';
+    if (navigator.geolocation) {
+        watchPositionID = navigator.geolocation.watchPosition(applyPosition, positionErrorHandler);
+    } else {
+        window.alert('Navigator is unusable!');
+    }
+}());
