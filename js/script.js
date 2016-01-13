@@ -13,6 +13,7 @@ function applyPosition(position) {
     currentMarker.setPosition(latlng);
     if (autoMove) {
         map.panTo(latlng);
+        map.setZoom(16);
     }
 }
 
