@@ -3,26 +3,22 @@
 var map;
 var watchPositionID;
 var currentMarker;
+var currentPosition;
 var autoMove = true;
 var accidentMarkers = [];
 var firebase = new Firebase("https://glaring-torch-4222.firebaseio.com/accident/");
-var COLOR_ARR = [
-    '0x1F77B4',
-    '0xFF7F0E',
-    '0x2CA02C',
-    '0xD62728',
-    '0x9467BD',
-    '0x8C564B',
-    '0xE377C2',
-    '0x7F7F7F',
-    '0xBCBD22',
-    '0x17BECF'
+var situation_marker = [
+    'img/red-dot.png',
+    'img/blue-dot.png',
+    'img/purple-dot.png',
+    'img/yellow-dot.png'
 ];
 
 function applyPosition(position) {
     'use strict';
     var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
     currentMarker.setPosition(latlng);
+    currentPosition = latlng;
     if (autoMove) {
         map.panTo(latlng);
         map.setZoom(16);
@@ -56,7 +52,8 @@ function mapsAPILoaded() {
         accidentMarkers.push(new google.maps.Marker({
             position: {lat: data.latitude, lng: data.longitude},
             map: map,
-            animation: google.maps.Animation.DROP
+            animation: google.maps.Animation.DROP,
+            icon: situation_marker[data.type]
         }));
     });
 }
@@ -67,10 +64,10 @@ function relocate() {
     $('#position-btn').fadeOut();
 }
 
-function accidentReport() {
+function accidentReport(btn) {
     'use strict';
-    var lat = 22.988287 + 0.000001 * Math.ceil(Math.random() * 8948),
-        lng = 120.212102 + 0.000001 * Math.ceil(Math.random() * 13239);
+    var lat = currentPosition.lat + 0.000001 * Math.ceil(Math.random() * 8948),
+        lng = currentPosition.lng + 0.000001 * Math.ceil(Math.random() * 13239);
     $.get('https://roads.googleapis.com/v1/snapToRoads', {
         key: 'AIzaSyCquZV94BIFX8D4J75AG8ZWGICNOJOGb60',
         path: lat + ',' + lng
@@ -79,8 +76,7 @@ function accidentReport() {
             timestamp: Math.ceil(Date.now() / 1000),
             latitude: data.snappedPoints[0].location.latitude,
             longitude: data.snappedPoints[0].location.longitude,
-            type: 0,
-            step: 1
+            type: Number($(btn).val())
         });
     });
 }
@@ -94,6 +90,13 @@ $(document).ready(function () {
     }
     $('#situation-btn-0').click(function () {
         $(this).toggleClass('open');
-        $('.situation-btn').toggleClass('scale');
+        if (window.innerHeight > window.innerWidth) {
+            $('.situation-btn').toggleClass('scaleY');
+        } else {
+            $('.situation-btn').toggleClass('scaleX');
+        }
+    });
+    $('.situation-btn').click(function () {
+        accidentReport(this);
     });
 });

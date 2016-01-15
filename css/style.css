@@ -52,35 +52,59 @@ html, body {
     animation:         toggleBtn .175s;
 }
 
-.scale {
+.scaleX, .scaleY {
     -webkit-transform: scale(1,1);
     transform:         scale(1,1);
     -webkit-filter: blur(0);
     filter: blur(0);
 }
 
-#situation-btn-1.scale {
+#situation-btn-1.scaleX {
     -webkit-transform: translateX(80px);
     transform:         translateX(80px);
-    background-color:  #1F77B4;
+    background-color:  #FF7A6C;
 }
 
-#situation-btn-2.scale {
+#situation-btn-2.scaleX {
     -webkit-transform: translateX(150px);
     transform:         translateX(150px);
-    background-color:  #FF7F0E;
+    background-color:  #6991FD;
 }
 
-#situation-btn-3.scale {
+#situation-btn-3.scaleX {
     -webkit-transform: translateX(220px);
     transform:         translateX(220px);
-    background-color:  #2CA02C;
+    background-color:  #8167FD;
 }
 
-#situation-btn-4.scale {
+#situation-btn-4.scaleX {
     -webkit-transform: translateX(290px);
     transform:         translateX(290px);
-    background-color:  #D62728;
+    background-color:  #FDF569;
+}
+
+#situation-btn-1.scaleY {
+    -webkit-transform: translateY(-80px);
+    transform:         translateY(-80px);
+    background-color:  #FF7A6C;
+}
+
+#situation-btn-2.scaleY {
+    -webkit-transform: translateY(-150px);
+    transform:         translateY(-150px);
+    background-color:  #6991FD;
+}
+
+#situation-btn-3.scaleY {
+    -webkit-transform: translateY(-220px);
+    transform:         translateY(-220px);
+    background-color:  #8167FD;
+}
+
+#situation-btn-4.scaleY {
+    -webkit-transform: translateY(-290px);
+    transform:         translateY(-290px);
+    background-color:  #FDF569;
 }
 
 @keyframes toggleBtn {
