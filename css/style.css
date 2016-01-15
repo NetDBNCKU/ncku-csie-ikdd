@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -29,12 +30,12 @@ html, body {
 }
 
 .situation-btn {
-    -webkit-transform: scale(0,0);
-    transform:         scale(0,0);
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
     -webkit-filter: blur(5px);
     filter: blur(5px);
     -webkit-transition: all .175s;
-    transition:         all .175s;
+    transition: all .175s;
 }
 
 #situation-btn-0 {
@@ -46,101 +47,132 @@ html, body {
 }
 
 .open {
-    -webkit-transform: scale(1.3,1.3);
-    transform:         scale(1.3,1.3);
+    -webkit-transform: scale(1.3, 1.3);
+    transform: scale(1.3, 1.3);
     -webkit-animation: toggleBtn .175s;
-    animation:         toggleBtn .175s;
+    animation: toggleBtn .175s;
 }
 
-.scaleX, .scaleY {
-    -webkit-transform: scale(1,1);
-    transform:         scale(1,1);
+.scaleX,
+.scaleY {
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
     -webkit-filter: blur(0);
     filter: blur(0);
 }
 
 #situation-btn-1.scaleX {
     -webkit-transform: translateX(80px);
-    transform:         translateX(80px);
-    background-color:  #FF7A6C;
+    transform: translateX(80px);
+    background-color: #FF7A6C;
 }
 
 #situation-btn-2.scaleX {
     -webkit-transform: translateX(150px);
-    transform:         translateX(150px);
-    background-color:  #6991FD;
+    transform: translateX(150px);
+    background-color: #6991FD;
 }
 
 #situation-btn-3.scaleX {
     -webkit-transform: translateX(220px);
-    transform:         translateX(220px);
-    background-color:  #8167FD;
+    transform: translateX(220px);
+    background-color: #8167FD;
 }
 
 #situation-btn-4.scaleX {
     -webkit-transform: translateX(290px);
-    transform:         translateX(290px);
-    background-color:  #FDF569;
+    transform: translateX(290px);
+    background-color: #FDF569;
 }
 
 #situation-btn-1.scaleY {
     -webkit-transform: translateY(-80px);
-    transform:         translateY(-80px);
-    background-color:  #FF7A6C;
+    transform: translateY(-80px);
+    background-color: #FF7A6C;
 }
 
 #situation-btn-2.scaleY {
     -webkit-transform: translateY(-150px);
-    transform:         translateY(-150px);
-    background-color:  #6991FD;
+    transform: translateY(-150px);
+    background-color: #6991FD;
 }
 
 #situation-btn-3.scaleY {
     -webkit-transform: translateY(-220px);
-    transform:         translateY(-220px);
-    background-color:  #8167FD;
+    transform: translateY(-220px);
+    background-color: #8167FD;
 }
 
 #situation-btn-4.scaleY {
     -webkit-transform: translateY(-290px);
-    transform:         translateY(-290px);
-    background-color:  #FDF569;
+    transform: translateY(-290px);
+    background-color: #FDF569;
 }
 
 @keyframes toggleBtn {
     0% {
-        -webkit-transform: scale(1,1);
-        transform:         scale(1,1);
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
     }
     25% {
-        -webkit-transform: scale(1.4,1.4);
-        transform:         scale(1.4,1.4); 
+        -webkit-transform: scale(1.4, 1.4);
+        transform: scale(1.4, 1.4);
     }
     75% {
-        -webkit-transform: scale(1.2,1.2);
-        transform:         scale(1.2,1.2);
+        -webkit-transform: scale(1.2, 1.2);
+        transform: scale(1.2, 1.2);
     }
     100% {
-        -webkit-transform: scale(1.3,1.3);
-        transform:         scale(1.3,1.3);
+        -webkit-transform: scale(1.3, 1.3);
+        transform: scale(1.3, 1.3);
     }
 }
 
 @-webkit-keyframes toggleBtn {
     0% {
-        -webkit-transform: scale(1,1);
-        transform:         scale(1,1);
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
     }
     25% {
-        -webkit-transform: scale(1.4,1.4);
-        transform:         scale(1.4,1.4); 
+        -webkit-transform: scale(1.4, 1.4);
+        transform: scale(1.4, 1.4);
     }
     75% {
-        -webkit-transform: scale(1.2,1.2);
-        transform:         scale(1.2,1.2);
+        -webkit-transform: scale(1.2, 1.2);
+        transform: scale(1.2, 1.2);
     }
     100% {
-        -webkit-transform: scale(1.3,1.3);
-        transform:         scale(1.3,1.3);
+        -webkit-transform: scale(1.3, 1.3);
+        transform: scale(1.3, 1.3);
     }
+}
+
+.mdl-card {
+    position: absolute;
+    width: 90%;
+    top: 10%;
+    left: 5%;
+}
+
+#report-form {
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+    -webkit-transition: all .175s;
+    transition: all .175s;
+}
+
+#report-form.scale {
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+}
+
+#report-form ul {
+    list-style: none;
+    font-size: 1.2em;
+}
+
+#report-form .mdl-card__title {
+    background: url(../img/1452870744_barricade.png) bottom right 15% no-repeat #46B6AC;
+    height: 160px;
+    color: white;
 }
