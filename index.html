@@ -13,9 +13,26 @@
 
 <body>
     <div id="map"></div>
-    <button  id="position-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" onclick="relocate()">
+    <button id="position-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="relocate()">
         <i class="material-icons">gps_fixed</i>
     </button>
+    <ul id="report-btn-group">
+        <li>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--primary" id="situation-btn-0">通報</button>
+        </li>
+        <li>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect situation-btn" id="situation-btn-1">事故</button>
+        </li>
+        <li>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect situation-btn" id="situation-btn-2">施工</button>
+        </li>
+        <li>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect situation-btn" id="situation-btn-3">管制</button>
+        </li>
+        <li>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect situation-btn" id="situation-btn-4">障礙</button>
+        </li>
+    </ul>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>

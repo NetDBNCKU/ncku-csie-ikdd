@@ -6,6 +6,18 @@ var currentMarker;
 var autoMove = true;
 var accidentMarkers = [];
 var firebase = new Firebase("https://glaring-torch-4222.firebaseio.com/accident/");
+var COLOR_ARR = [
+    '0x1F77B4',
+    '0xFF7F0E',
+    '0x2CA02C',
+    '0xD62728',
+    '0x9467BD',
+    '0x8C564B',
+    '0xE377C2',
+    '0x7F7F7F',
+    '0xBCBD22',
+    '0x17BECF'
+];
 
 function applyPosition(position) {
     'use strict';
@@ -73,11 +85,15 @@ function accidentReport() {
     });
 }
 
-(function () {
+$(document).ready(function () {
     'use strict';
     if (navigator.geolocation) {
         watchPositionID = navigator.geolocation.watchPosition(applyPosition, positionErrorHandler);
     } else {
         window.alert('Navigator is unusable!');
     }
-}());
+    $('#situation-btn-0').click(function () {
+        $(this).toggleClass('open');
+        $('.situation-btn').toggleClass('scale');
+    });
+});
