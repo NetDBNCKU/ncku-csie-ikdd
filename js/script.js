@@ -131,6 +131,7 @@ $(document).ready(function () {
     $('.situation-btn').click(function () {
         $('#report-form').toggleClass('scale');
         $('#report-confirm').val($(this).val());
+        $('#report-form h2').html($(this).html());
     });
     $('#report-cancel').click(function () {
         $('#report-form').toggleClass('scale');
