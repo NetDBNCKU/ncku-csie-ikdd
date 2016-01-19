@@ -1,44 +1,42 @@
 /*global google:false, Firebase:false, $:false*/
 
 var map;
+var currentPosition;
+var gpsFixed = true;
 var watchPositionID;
 var currentMarker;
-var currentPosition;
-var autoMove = true;
-var accidentMarkers = [];
-var accidentInfo = [];
 var firebase = new Firebase("https://glaring-torch-4222.firebaseio.com/accident/");
 var infoWindow;
-var accidentType = [
-    '事故',
-    '施工',
-    '管制',
-    '障礙'
-];
 var situation_marker_icon = [
     'img/red-dot.png',
     'img/blue-dot.png',
     'img/purple-dot.png',
     'img/yellow-dot.png'
 ];
+var accidentMarkers = [];
+var accidentInfo = [];
+var accidentType = [
+    '事故',
+    '施工',
+    '管制',
+    '障礙'
+];
 
 function applyPosition(position) {
     'use strict';
-    var latlng = {
+    currentPosition = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
     };
-    currentMarker.setPosition(latlng);
-    currentPosition = latlng;
-    if (autoMove) {
-        map.panTo(latlng);
-        map.setZoom(16);
+    currentMarker.setPosition(currentPosition);
+    if (gpsFixed) {
+        map.panTo(currentPosition);
     }
 }
 
 function positionErrorHandler(positionError) {
     'use strict';
-    window.console.log('Error: (' + positionError.code + ')' + positionError.message);
+    window.alert('Error: (' + positionError.code + ')' + positionError.message);
 }
 
 function mapsAPILoaded() {
@@ -51,12 +49,16 @@ function mapsAPILoaded() {
         center: defaultPosition,
         zoom: 16
     });
+    if (navigator.geolocation) {
+        watchPositionID = navigator.geolocation.watchPosition(applyPosition, positionErrorHandler);
+    } else {
+        window.alert('Navigator is unusable!');
+    }
     map.addListener('dragstart', function () {
-        autoMove = false;
-        $('#position-btn').fadeIn();
+        gpsFixed = false;
+        $('#gps-fixed-btn').fadeIn('fast');
     });
     currentMarker = new google.maps.Marker({
-        position: defaultPosition,
         map: map,
         zIndex: google.maps.Marker.MAX_ZINDEX + 1,
         icon: 'img/1452554285_car.png'
@@ -87,12 +89,6 @@ function mapsAPILoaded() {
     });
 }
 
-function relocate() {
-    'use strict';
-    autoMove = true;
-    $('#position-btn').fadeOut();
-}
-
 function accidentReport(type, desc) {
     'use strict';
     /*
@@ -113,32 +109,35 @@ function accidentReport(type, desc) {
     });
 }
 
+function removeAllOpenClass() {
+    'use strict';
+    $('#report-toggle-btn').removeClass('open');
+    $('#situation-group-ul > li > button').removeClass('open');
+    $('#report-form').removeClass('open');
+}
+
 $(document).ready(function () {
     'use strict';
-    if (navigator.geolocation) {
-        watchPositionID = navigator.geolocation.watchPosition(applyPosition, positionErrorHandler);
-    } else {
-        window.alert('Navigator is unusable!');
-    }
-    $('#situation-btn-0').click(function () {
+    $('#report-toggle-btn').click(function () {
         $(this).toggleClass('open');
-        if (window.innerHeight > window.innerWidth) {
-            $('.situation-btn').toggleClass('scaleY');
-        } else {
-            $('.situation-btn').toggleClass('scaleX');
-        }
+        $('#situation-group-ul > li > button').toggleClass('open');
     });
-    $('.situation-btn').click(function () {
-        $('#report-form').toggleClass('scale');
+    $('#gps-fixed-btn').click(function () {
+        gpsFixed = true;
+        navigator.geolocation.getCurrentPosition(applyPosition, positionErrorHandler);
+        $(this).fadeOut('fast');
+    });
+    $('#situation-group-ul > li > button').click(function () {
+        $('#report-form').toggleClass('open');
         $('#report-confirm').val($(this).val());
         $('#report-form h2').html($(this).html());
+        $('#desc').val('');
     });
     $('#report-cancel').click(function () {
-        $('#report-form').toggleClass('scale');
+        removeAllOpenClass();
     });
     $('#report-confirm').click(function () {
         accidentReport(Number($(this).val()), $('#desc').val());
-        $('#report-form').toggleClass('scale');
-        $('#situation-btn-0').click();
+        removeAllOpenClass();
     });
 });
