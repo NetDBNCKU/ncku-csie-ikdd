@@ -21,7 +21,7 @@ var ACCIDENT_TYPE = [
     '障礙'
 ];
 var CREATE_NEW_RADIUS = 50;
-var DURIATION = 30 * 60;
+var DURIATION = 60 * 60;
 
 var degreesToRadians = function (degrees) {
     'use strict';
@@ -58,7 +58,7 @@ function applyPosition(position) {
 
 function positionErrorHandler(positionError) {
     'use strict';
-    window.alert('Error: (' + positionError.code + ')' + positionError.message);
+    window.alert('無法取得位置，請開啟定位及WiFi並重新整理！');
 }
 
 function mapsAPILoaded() {
