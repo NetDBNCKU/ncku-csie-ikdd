@@ -86,7 +86,7 @@ function mapsAPILoaded() {
         icon: 'img/1452554285_car.png'
     });
     infoWindow = new google.maps.InfoWindow({
-        maxWidth: 200
+        maxWidth: 300
     });
     FIREBASE.child('accident').orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_added', function (snapshot) {
         var data = snapshot.val(),
@@ -100,8 +100,11 @@ function mapsAPILoaded() {
         marker.addListener('click', function () {
             infoWindow.setContent(
                 '<h4>' + ACCIDENT_TYPE[accidents[this.getTitle()].info.type] + '</h4>' +
-                    '<p>' + accidents[this.getTitle()].info.description + '</p>' +
-                    '<button class="mdl-button mdl-js-button mdl-button--raised">已排除</button>'
+                    '<p>' +
+                        '<strong>更新時間</strong>: ' + (new Date(accidents[this.getTitle()].info.timestamp * 1000)).toLocaleString() +
+                        '<br>' +
+                        '<strong>路況敘述</strong>: ' + accidents[this.getTitle()].info.description +
+                    '</p>'
             );
             infoWindow.open(map, this);
         });
