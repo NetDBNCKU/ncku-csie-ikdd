@@ -14,7 +14,7 @@ body,
 #report-group-div {
     position: absolute;
     left: 3%;
-    bottom: 3%;
+    bottom: 5%;
 }
 
 #situation-group-ul {
@@ -121,6 +121,11 @@ body,
         transform: translateY(-290px);
         background-color: #FDF569;
     }
+    #situation-group-ul > li > button.open[value="4"] {
+        -webkit-transform: translateY(-360px);
+        transform: translateY(-360px);
+        background-color: #98DF8A;
+    }
 }
 
 @media screen and (orientation: landscape) {
@@ -144,9 +149,15 @@ body,
         transform: translateX(290px);
         background-color: #FDF569;
     }
+    #situation-group-ul > li > button.open[value="4"] {
+        -webkit-transform: translateX(360px);
+        transform: translateX(360px);
+        background-color: #98DF8A;
+    }
 }
 
-#report-form {
+#report-form,
+#feedback-form {
     position: absolute;
     width: 90%;
     top: 10%;
@@ -157,13 +168,20 @@ body,
     transition: all .175s;
 }
 
-#report-form.open {
+#report-form.open,
+#feedback-form.open {
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1);
 }
 
 #report-form .mdl-card__title {
     background: url(../img/1452870744_barricade.png) bottom right 15% no-repeat #46B6AC;
+    height: 160px;
+    color: white;
+}
+
+#feedback-form .mdl-card__title {
+    background: url(../img/1453571382_cartoon-02.png) bottom right 15% no-repeat #46B6AC;
     height: 160px;
     color: white;
 }

@@ -5,7 +5,7 @@ var currentPosition;
 var gpsFixed = true;
 var watchPositionID;
 var currentMarker;
-var FIREBASE = new Firebase("https://glaring-torch-4222.firebaseio.com/accident");
+var FIREBASE = new Firebase("https://glaring-torch-4222.firebaseio.com/");
 var infoWindow;
 var accidents = {};
 var SITUATION_MARKER_ICON = [
@@ -88,7 +88,7 @@ function mapsAPILoaded() {
     infoWindow = new google.maps.InfoWindow({
         maxWidth: 200
     });
-    FIREBASE.orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_added', function (snapshot) {
+    FIREBASE.child('accident').orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_added', function (snapshot) {
         var data = snapshot.val(),
             marker = new google.maps.Marker({
                 position: data.position,
@@ -110,7 +110,7 @@ function mapsAPILoaded() {
             info: data
         };
     });
-    FIREBASE.orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_changed', function (snapshot) {
+    FIREBASE.child('accident').orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_changed', function (snapshot) {
         accidents[snapshot.key()].marker.setPosition(snapshot.val().position);
         accidents[snapshot.key()].marker.setIcon(SITUATION_MARKER_ICON[snapshot.val().type]);
         accidents[snapshot.key()].info = snapshot.val();
@@ -136,7 +136,7 @@ function accidentReport(type, desc) {
         path: position.lat + ',' + position.lng
     }, function (data) {
         if (identifier === '') {
-            FIREBASE.push({
+            FIREBASE.child('accident').push({
                 timestamp: Math.ceil(Date.now() / 1000),
                 position: {
                     lat: data.snappedPoints[0].location.latitude,
@@ -146,7 +146,7 @@ function accidentReport(type, desc) {
                 type: type
             });
         } else {
-            FIREBASE.child(identifier).update({
+            FIREBASE.child('accident').child(identifier).update({
                 timestamp: Math.ceil(Date.now() / 1000),
                 position: {
                     lat: data.snappedPoints[0].location.latitude,
@@ -164,6 +164,7 @@ function removeAllOpenClass() {
     $('#report-toggle-btn').removeClass('open');
     $('#situation-group-ul > li > button').removeClass('open');
     $('#report-form').removeClass('open');
+    $('#feedback-form').removeClass('open');
 }
 
 $(document).ready(function () {
@@ -178,16 +179,27 @@ $(document).ready(function () {
         $(this).fadeOut('fast');
     });
     $('#situation-group-ul > li > button').click(function () {
-        $('#report-form').toggleClass('open');
-        $('#report-confirm').val($(this).val());
-        $('#report-form h2').html($(this).html());
-        $('#desc').val('');
+        if ($(this).val() === '4') {
+            $('#feedback-form').toggleClass('open');
+        } else {
+            $('#report-form').toggleClass('open');
+            $('#report-confirm').val($(this).val());
+            $('#report-form h2').html($(this).html());
+            $('#desc').val('');
+        }
     });
-    $('#report-cancel').click(function () {
+    $('#report-cancel, #feedback-cancel').click(function () {
         removeAllOpenClass();
     });
     $('#report-confirm').click(function () {
         accidentReport(Number($(this).val()), $('#desc').val());
+        removeAllOpenClass();
+    });
+    $('#feedback-confirm').click(function () {
+        FIREBASE.child('opinion').push({
+            timestamp: Math.ceil(Date.now() / 1000),
+            content: $('#opinion').val()
+        });
         removeAllOpenClass();
     });
 });
