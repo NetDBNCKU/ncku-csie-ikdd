@@ -5,22 +5,44 @@ var currentPosition;
 var gpsFixed = true;
 var watchPositionID;
 var currentMarker;
-var firebase = new Firebase("https://glaring-torch-4222.firebaseio.com/accident/");
+var FIREBASE = new Firebase("https://glaring-torch-4222.firebaseio.com/accident");
 var infoWindow;
-var situation_marker_icon = [
+var accidents = {};
+var SITUATION_MARKER_ICON = [
     'img/red-dot.png',
     'img/blue-dot.png',
     'img/purple-dot.png',
     'img/yellow-dot.png'
 ];
-var accidentMarkers = [];
-var accidentInfo = [];
-var accidentType = [
+var ACCIDENT_TYPE = [
     '事故',
     '施工',
     '管制',
     '障礙'
 ];
+var CREATE_NEW_RADIUS = 50;
+var DURIATION = 30 * 60;
+
+var degreesToRadians = function (degrees) {
+    'use strict';
+    return (degrees * Math.PI / 180);
+};
+
+function distance(pos1, pos2) {
+    'use strict';
+    var a, c,
+        latDelta = degreesToRadians(pos2.lat - pos1.lat),
+        lonDelta = degreesToRadians(pos2.lng - pos1.lng),
+        radius = 6371; // Earth's radius in kilometers
+
+    a = (Math.sin(latDelta / 2) * Math.sin(latDelta / 2)) +
+        (Math.cos(degreesToRadians(pos1.lat)) * Math.cos(degreesToRadians(pos2.lat)) *
+            Math.sin(lonDelta / 2) * Math.sin(lonDelta / 2));
+
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return radius * c * 1000; // kilometer -> meter
+}
 
 function applyPosition(position) {
     'use strict';
@@ -66,46 +88,74 @@ function mapsAPILoaded() {
     infoWindow = new google.maps.InfoWindow({
         maxWidth: 200
     });
-    firebase.on('child_added', function (snapshot) {
+    FIREBASE.orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_added', function (snapshot) {
         var data = snapshot.val(),
             marker = new google.maps.Marker({
-                position: {
-                    lat: data.latitude,
-                    lng: data.longitude
-                },
+                position: data.position,
                 map: map,
                 animation: google.maps.Animation.DROP,
-                icon: situation_marker_icon[data.type]
+                icon: SITUATION_MARKER_ICON[data.type],
+                title: snapshot.key()
             });
         marker.addListener('click', function () {
             infoWindow.setContent(
-                '<h4>' + accidentType[accidentInfo[accidentMarkers.indexOf(this)].type] + '</h4>' +
-                    '<p>' + accidentInfo[accidentMarkers.indexOf(this)].description + '</p>'
+                '<h4>' + ACCIDENT_TYPE[accidents[this.getTitle()].info.type] + '</h4>' +
+                    '<p>' + accidents[this.getTitle()].info.description + '</p>' +
+                    '<button class="mdl-button mdl-js-button mdl-button--raised">已排除</button>'
             );
             infoWindow.open(map, this);
         });
-        accidentInfo.push(data);
-        accidentMarkers.push(marker);
+        accidents[snapshot.key()] = {
+            marker: marker,
+            info: data
+        };
+    });
+    FIREBASE.orderByChild('timestamp').startAt(Math.ceil(Date.now() / 1000) - DURIATION).on('child_changed', function (snapshot) {
+        accidents[snapshot.key()].marker.setPosition(snapshot.val().position);
+        accidents[snapshot.key()].marker.setIcon(SITUATION_MARKER_ICON[snapshot.val().type]);
+        accidents[snapshot.key()].info = snapshot.val();
     });
 }
 
 function accidentReport(type, desc) {
     'use strict';
-    /*
-    var lat = currentPosition.lat + 0.000001 * Math.ceil(Math.random() * 8948),
-        lng = currentPosition.lng + 0.000001 * Math.ceil(Math.random() * 13239);
-    */
+    var id, identifier = '', position = $.extend({}, currentPosition);
+    for (id in accidents) {
+        if (accidents.hasOwnProperty(id)) {
+            if (distance(currentPosition, accidents[id].info.position) < CREATE_NEW_RADIUS) {
+                identifier = id;
+                position.lat = (position.lat + accidents[id].info.position.lat) / 2;
+                position.lng = (position.lng + accidents[id].info.position.lng) / 2;
+                desc = accidents[id].info.description + '\n' + desc;
+                break;
+            }
+        }
+    }
     $.get('https://roads.googleapis.com/v1/snapToRoads', {
         key: 'AIzaSyCquZV94BIFX8D4J75AG8ZWGICNOJOGb60',
-        path: currentPosition.lat + ',' + currentPosition.lng
+        path: position.lat + ',' + position.lng
     }, function (data) {
-        firebase.push({
-            timestamp: Math.ceil(Date.now() / 1000),
-            latitude: data.snappedPoints[0].location.latitude,
-            longitude: data.snappedPoints[0].location.longitude,
-            description: desc,
-            type: type
-        });
+        if (identifier === '') {
+            FIREBASE.push({
+                timestamp: Math.ceil(Date.now() / 1000),
+                position: {
+                    lat: data.snappedPoints[0].location.latitude,
+                    lng: data.snappedPoints[0].location.longitude
+                },
+                description: desc,
+                type: type
+            });
+        } else {
+            FIREBASE.child(identifier).update({
+                timestamp: Math.ceil(Date.now() / 1000),
+                position: {
+                    lat: data.snappedPoints[0].location.latitude,
+                    lng: data.snappedPoints[0].location.longitude
+                },
+                description: desc,
+                type: type
+            });
+        }
     });
 }
 
