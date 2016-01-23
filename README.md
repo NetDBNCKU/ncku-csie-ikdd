@@ -14,3 +14,8 @@
   * 適應裝置直立或橫擺
 * 僅顯示最後更新時間60分內的交通事件
 * 在Firefox瀏覽器下有較好的顯示效果
+
+### 螢幕截圖
+|通報畫面|主畫面|
+|---|---|
+|![Snapshot1](https://raw.githubusercontent.com/riljian/ncku-csie-ikdd/gh-pages/img/snapshot-1.jpg)|![Snapshot2](https://raw.githubusercontent.com/riljian/ncku-csie-ikdd/gh-pages/img/snapshot-2.jpg)|
