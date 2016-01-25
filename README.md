@@ -1,5 +1,8 @@
 # [交通障礙通報](https://riljian.github.io/ncku-csie-ikdd/)
 
+### [Android 版本](https://www.dropbox.com/s/hkn51cc3kluh0n0/EZDriver.apk?dl=0)
+Author: [Wayne Wei](https://github.com/WayneWei/EZDrive)
+
 ### 動機
 * 警廣即時路況中，路況資訊較不方便理解實際位置
 * 簡化通報路況流程
